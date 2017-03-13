@@ -11,19 +11,27 @@ window.onload = function() {
         click_y = e.pageY - 62;
         pigeon_size = [pigeon_x, pigeon_x + 82, pigeon_y, pigeon_y + 75]
 
-        console.log(pigeon_size.toString())
-        console.log(e.pageX)
-        console.log(e.pageY)
-
         if ((click_x >= pigeon_size[0] && click_x <= pigeon_size[1]) &&
             (click_y >= pigeon_size[2] && click_y <= pigeon_size[3])) {
             score += 1;
         } else {
             life_remains -= 1;
+            renderLifeRemains();
+            if(life_remains <= 0){
+                buildGameOver();
+            }
+            if((click_x >= 350 && click_x <= 425) && (click_y >= 262 && click_y <= 274)){
+                reset();
+                initialize();
+                pigeonFly();
+            }
         }
 
-        initialize();
-        pigeonFly();
+        if(life_remains > 0){
+            renderBackground();
+            renderTop();
+            pigeonFly();
+        }
     }
 };
 
