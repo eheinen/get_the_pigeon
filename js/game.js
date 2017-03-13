@@ -5,9 +5,15 @@ window.onload = function() {
     canvas.addEventListener("click", onClick, false);
 
     function onClick(e) {
-        click_x = e.pageX - 232;
-        click_y = e.pageY - 60;
+        //click_x = e.pageX - 232;
+        click_x = e.pageX - 321;
+        //click_y = e.pageY - 60;
+        click_y = e.pageY - 62;
         pigeon_size = [pigeon_x, pigeon_x + 82, pigeon_y, pigeon_y + 75]
+
+        console.log(pigeon_size.toString())
+        console.log(e.pageX)
+        console.log(e.pageY)
 
         if ((click_x >= pigeon_size[0] && click_x <= pigeon_size[1]) &&
             (click_y >= pigeon_size[2] && click_y <= pigeon_size[3])) {
