@@ -8,14 +8,18 @@ time_remains = 0;
 life_remains = 3;
 pigeon_x = 0;
 pigeon_y = 0;
-gameOverBuilt = false;
+gameOver = false;
+startToPlay = new Date();
+timePlayed = "00:00";
 
-function reset(){
+function reset() {
     score = 0;
     velocity = 0;
     time_remains = 0;
     life_remains = 3;
-    gameOverBuilt = false;
+    gameOver = false;
+    startToPlay = new Date();
+    timePlayed = "00:00";
 }
 
 function initialize() {
@@ -23,11 +27,20 @@ function initialize() {
     renderTop();
 }
 
-function buildGameOver(){
-    if(gameOverBuilt == false){
+// Build game over:
+function buildGameOver() {
+    if (gameOver == false) {
         ctx.fillStyle = "#333";
         ctx.globalAlpha = 0.75;
         ctx.fillRect(0, 51, 1000, 1000);
+
+        ctx.fillStyle = "#FFF";
+        ctx.font = "30px sans-serif";
+        ctx.fillText("SCORE: " + score, (canvas.width / 2) - 350, (canvas.height / 2) - 125);
+
+        ctx.fillStyle = "#FFF";
+        ctx.font = "30px sans-serif";
+        ctx.fillText("TIME: " + timePlayed, (canvas.width / 2) + 185, (canvas.height / 2) - 125);
 
         ctx.fillStyle = "#FFF";
         ctx.font = "30px sans-serif";
@@ -37,11 +50,14 @@ function buildGameOver(){
         ctx.font = "18px sans-serif";
         ctx.fillText("Try Again", (canvas.width / 2) - 50, (canvas.height / 2) + 35);
 
-        gameOverBuilt = true;
+        renderTop();
+
+        gameOver = true;
     }
 }
 
-function buildScenario(){
+// Build scenario:
+function buildScenario() {
     canvas = document.getElementById("screen-pigeon");
     ctx = canvas.getContext("2d");
     gameWidth = 800;
@@ -54,24 +70,23 @@ function buildScenario(){
     renderTop();
 }
 
-function renderTop(){
-    // Build top line to get scores:
+// Render top line to get scores:
+function renderTop() {
     ctx.fillStyle = "#333";
     ctx.fillRect(0, 0, gameWidth, 50);
-
-    // Life remains label:
-    ctx.fillStyle = "#FFF";
-    ctx.font = "14px sans-serif";
-    ctx.fillText("Life: ", 20, 30);
 
     renderLifeRemains();
     renderScore();
     renderTime();
 }
 
-function renderLifeRemains(){
-    // Life remains value:
-    if(life_remains >= 0){
+// Render Life remains:
+function renderLifeRemains() {
+    ctx.fillStyle = "#FFF";
+    ctx.font = "14px sans-serif";
+    ctx.fillText("Life: ", 20, 30);
+
+    if (life_remains >= 0) {
         var lifeImage = new Image();
         lifeImage.src = "imgs/life_" + life_remains + ".png";
         lifeImage.onload = function() {
@@ -80,32 +95,39 @@ function renderLifeRemains(){
     }
 }
 
-function renderScore(){
-    // Score label:
+// Render Score label and value:
+function renderScore() {
     ctx.fillStyle = "#FFF";
     ctx.font = "14px sans-serif";
     ctx.fillText("Score: ", 150, 30);
 
-    // Score value:
     ctx.fillStyle = "#FFF";
     ctx.font = "14px sans-serif";
     ctx.fillText(score, 195, 31);
 }
 
-function renderTime(){
-    // Time label:
+// Render Time label and value:
+function renderTime() {
+    ctx.fillStyle = "#333";
+    ctx.fillRect(690, 10, 90, 31);
+
     ctx.fillStyle = "#FFF";
     ctx.font = "14px sans-serif";
     ctx.fillText("Time: ", 700, 30);
 
-    // Time value:
+    var timeNow = new Date();
+    timePlayed = msToMMSS(timeNow - startToPlay);
     ctx.fillStyle = "#FFF";
     ctx.font = "14px sans-serif";
-    ctx.fillText("00:00", 740, 31);
+    ctx.fillText(timePlayed, 740, 31);
+
+    if (!gameOver) {
+        requestAnimationFrame(renderTime);
+    }
 }
 
+// Render Background image:
 function renderBackground() {
-    // Background image:
     var bgImage = new Image();
     bgImage.src = "imgs/background.jpg";
     bgImage.onload = function() {
